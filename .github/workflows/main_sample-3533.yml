@@ -1,5 +1,5 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action   
+# More GitHub Actions for Azure: https://github.com/Azure/actions   
 
 name: Build and deploy Java project to Azure Function App - sample-3533
 
@@ -10,9 +10,9 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_NAME: sample-3533 # set this to your function app name on Azure
-  PACKAGE_DIRECTORY: '.' # set this to the directory which contains pom.xml file
-  JAVA_VERSION: '17' # set this to the java version to use
+  AZURE_FUNCTIONAPP_NAME: sample-3533
+  PACKAGE_DIRECTORY: '.' # directory containing pom.xml
+  JAVA_VERSION: '17'
 
 jobs:
   build-and-deploy:
@@ -22,19 +22,19 @@ jobs:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
 
-      - name: Setup Java Sdk ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v1
-        with: |+
+      - name: Setup Java SDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
           java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin' # or 'adoptium', 'zulu', etc.
 
-      - name: 'Restore Project Dependencies Using Mvn'
-        shell: pwsh
-        run: |+
+      - name: 'Build Project with Maven'
+        run: |
           pushd './${{ env.PACKAGE_DIRECTORY }}'
           mvn clean package
           popd
-      
-      - name: 'Run Azure Functions Action'
+
+      - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
         id: fa
         with:
@@ -44,4 +44,3 @@ jobs:
           respect-pom-xml: true
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AAD13D02B86C42C9B37761FD3522C6F8 }}
           sku: 'flexconsumption'
-        
