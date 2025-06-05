@@ -34,4 +34,5 @@ jobs:
           slot-name: 'Production'
           package: '.'
           respect-pom-xml: true
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           sku: 'flexconsumption'
